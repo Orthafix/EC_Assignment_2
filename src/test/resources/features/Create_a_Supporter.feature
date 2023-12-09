@@ -21,7 +21,7 @@ Feature: Create a supporter account
     And Member accepts communication preferences
     And Member accepts coc
     When Confirm and join button is pressed
-    Then date picker will display "19/09/1981"
+    Then date picker will display <birthday>
     Then <email> address will be validated with <confirm_email>
     And <password> will be validated with <retype_password>
     And a <new_member> will be created or otherwise be rejected

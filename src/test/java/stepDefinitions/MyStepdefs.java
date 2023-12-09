@@ -33,7 +33,7 @@ public class MyStepdefs {
         driver.get("https://membership.basketballengland.co.uk/NewSupporterAccount");
     }
 
-    @Given("Member is born {string}")
+    @Given("Member is born {}")
     public void memberIsBornDriverUsingBrowser(String date) throws InterruptedException {
         driver.findElement(By.id("dp")).click();
         driver.findElement(By.id("dp")).sendKeys(date);
@@ -96,10 +96,10 @@ public class MyStepdefs {
         driver.findElement(By.name("join")).click();
     }
 
-    @Then("date picker will display {string}")
-    public void datePickerWillDisplay(String fullDate) throws InterruptedException {
+    @Then("date picker will display {}")
+    public void datePickerWillDisplay(String birthday) throws InterruptedException {
         /*WebElement dateBornElement = driver.findElement(By.id("dp"));
-        String expected = fullDate;
+        String expected = birthday;
         String actual = dateBornElement.getText();
         Assertions.assertEquals(expected, actual);*/
         System.out.println("datepickerDisplay");
