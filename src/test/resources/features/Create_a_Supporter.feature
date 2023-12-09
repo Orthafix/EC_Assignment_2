@@ -2,36 +2,35 @@ Feature: Create a supporter account
   As a basketball supporter
   I would like to create a supporter account
   To be able to have a beneficial membership
+
   Background:
-    """
+  """
     Create a supporter account for the basketball supporter
     """
 
-  #TODO: Make a Scenario outline of this instead
-  Scenario: Add birthday of member
-    Given Member is born 19 "September" 1981
-    When date is selected
-    Then date picker will display "19/09/1981"
-
   Scenario Outline: Enter member details, validation and confirmation
-    Given The member's name is <firstName> and <lastName>
-    And Email adress is <email>
+    Given I am using "<browser>" as browser
+    Given Member is born <birthday>
+    And The member's name is <firstName> and <lastName>
+    And Email address is <email>
     And Confirm Email is <confirm_email>
     And Password is <password>
     And Retype password of password is <retype_password>
-    And Member has the role <role>
-    And Member accept account Confirmation with <terms_condition> and <is_18_years>
-    And Member accepts <communication_preferences>
-    And Member accepts Code of Conducts and ethics <coc>
+    And Member has the role Basket Ball media
+    And Member accept account confirmation terms and conditions
+    And Member accepts communication preferences
+    And Member accepts coc
     When Confirm and join button is pressed
-    Then <email> will be validated with <Confirm Email> adress and then be accepted or rejected
-    And <password> will be validated with <retype_password> and then be accepted
-    And a new member will be created
-  Examples: The first row represent the "happy path" and what follows is the "sad paths".
-    | firstName | lastName | email    | confirm_email      | password   | retype_password | role             | terms_condition | is_18_years | communication_preferences   | coc   |
-    | John      | Doe      | john.doe | john.doe@test.com  | johndoe123 | johndoe123      | Basketball media | true            | true        | marketing communication     | true  |
-    |           | Doe      | john.doe | john.die@test.com  | johndoe123 | johndoe123      | None             | false           | false       | communication from partners | false |
-    | John      | Doe      | john.doe | john.doe@test.com  |            |                 | Fan              | false           | true        | marketing communication     | true  |
-    | John      | Doe      |          | john.doeAttest.com | johndoe123 | johndoe123      | Official         | true            | false       | communication from partners | false |
-    | John      |          | john.doe | john.doe@testcom   | johndoe123 | johndoe123      | Player           | true            | true        | marketing communication     | true  |
-    | John      | Doe      | john.doe | john.doe@test.com  | johndoe123 | johndoe123      |                  | false           | false       | communication from partners | false |
+    Then date picker will display "19/09/1981"
+    Then <email> address will be validated with <confirm_email>
+    And <password> will be validated with <retype_password>
+    And a <new_member> will be created or otherwise be rejected
+
+    Examples:
+      | browser  | birthday   | firstName | lastName | email                 | confirm_email         | password   | retype_password | new_member |
+      | Chrome   | 22/01/1978 | John      | Doe      | john.doe@test.com     | john.doe@test.com     | johndoe123 | johndoe123      | True       |
+      | Fire fox | 19/09/1981 | May       | Smith    | may.smith@test.com    | mike.smith@test.com   | johndoe123 | johndoe123      | false      |
+      | Edge     | 03/07/2002 | Sam       | Anderson | sam.anderson@test.com | sam.anderson@test.com | johndoe123 | johnnydie123    | false      |
+      | Chrome   | 16/02/1999 | Anna      | Bronson  | anna.bronson@test.com | anna.bronson@test.com | johndoe123 | johndoe123      | false      |
+      |          |            |           |          |                       |                       |            |                 |            |
+      |          |            |           |          |                       |                       |            |                 |            |
