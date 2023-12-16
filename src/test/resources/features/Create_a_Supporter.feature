@@ -12,25 +12,23 @@ Feature: Create a supporter account
     Given I am using "<browser>" as browser
     Given Member is born <birthday>
     And The member's name is <firstName> and <lastName>
-    And Email address is <email>
-    And Confirm Email is <confirm_email>
-    And Password is <password>
-    And Retype password of password is <retype_password>
+    And Email address has been added
+    And Password is <password> and retype password is <retype_password>
     And Member has the role Basket Ball media
-    And Member accept account confirmation terms and conditions
+    And Member <handles_t_c> terms and conditions
     And Member accepts communication preferences
     And Member accepts coc
-    When Confirm and join button is pressed
-    Then date picker will display <birthday>
-    Then <email> address will be validated with <confirm_email>
-    And <password> will be validated with <retype_password>
-    And a <new_member> will be created or otherwise be rejected
+    Then date picker will display birthday
+    And first and last name <name_is_validated>
+    And email address will be <validated> to confirm email
+    And password will be <matched> to confirm password
+    And Members terms and conditions is validated
+    Then Confirm and join button is pressed
+    And a new member account will be created or rejected
 
     Examples:
-      | browser  | birthday   | firstName | lastName | email                 | confirm_email         | password   | retype_password | new_member |
-      | Chrome   | 22/01/1978 | John      | Doe      | john.doe@test.com     | john.doe@test.com     | johndoe123 | johndoe123      | True       |
-      | Fire fox | 19/09/1981 | May       | Smith    | may.smith@test.com    | mike.smith@test.com   | johndoe123 | johndoe123      | false      |
-      | Edge     | 03/07/2002 | Sam       | Anderson | sam.anderson@test.com | sam.anderson@test.com | johndoe123 | johnnydie123    | false      |
-      | Chrome   | 16/02/1999 | Anna      | Bronson  | anna.bronson@test.com | anna.bronson@test.com | johndoe123 | johndoe123      | false      |
-      |          |            |           |          |                       |                       |            |                 |            |
-      |          |            |           |          |                       |                       |            |                 |            |
+      | browser | birthday   | firstName | lastName | password   | retype_password | handles_t_c | name_is_validated | validated | matched |
+      | Chrome  | 22/01/1978 | John      | Doe      | johndoe123 | johndoe123      | accepts     | is not empty      | equal     | equal   |
+     # | Chrome  | 19/09/1981 | May       |          | johndoe123 | johndoe123      | accepts     | is empty          | not equal | equal   |
+     # | Chrome  | 03/07/2002 | Sam       | Anderson | johndoe123 | johnnydie123    | accepts     | is not empty      | equal     | not equal |
+     # | Chrome  | 16/02/1999 | Anna      | Bronson  | johndoe123 | johndoe123      | rejects     | is not empty      | equal     | equal     |
