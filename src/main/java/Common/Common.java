@@ -1,5 +1,11 @@
 package Common;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.WebDriver;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Common {
@@ -8,29 +14,36 @@ public class Common {
     private String confirmEmail;
     private String firstName;
     private String lastName;
-    private String password;
-    private String confirmPassword;
+    private List<String> errorMessages;
     private String birthday;
-    private boolean newMember;
+    private boolean memberStatus = true;
     private final String[] HOST = {"@gmail", "@yahoo", "@hotmail", "@outlook", "@mail", "@aol", "@zoho", "@iCloud"};
     private final String[] DOMAIN = {".com", ".se", ".nu", ".de", ".io", ".org", ".net", ".co", ".app", ".uk", ".info"};
     private final String VOWELS = "aeiouyåäö";
     private final String CONSONANTS = "bcdfghjklmnpqrstvwxz";
     private final int NAME_LENGTH = 4;
 
-    public Common(){}
+    public Common() {
+    }
 
-    public String getRandomEmail()
+    public void setErrorMessage(String errorMessage)
     {
+        this.errorMessages = new ArrayList<>();
+        this.errorMessages.add(errorMessage);
+    }
+
+
+    public List<String> getErrorMessages()
+    {
+        return this.errorMessages;
+    }
+
+    public String getRandomEmail() {
         return generateRandomEmail();
     }
 
-    public boolean getNewMember() {
-        return newMember;
-    }
-
-    public void setNewMember(boolean newMember) {
-        this.newMember = newMember;
+    public boolean getMemberStatus() {
+        return memberStatus;
     }
 
     public void setFirstName(String firstName) {
@@ -110,6 +123,44 @@ public class Common {
     public boolean isValidMembershipNumber(String membershipNumber) {
         String regex = "[A-Z]\\d{6}";
         return membershipNumber.matches(regex);
+    }
+
+    public boolean hasErrors(WebDriver driver, String errorMessage) {
+        boolean hasErrors = false;
+
+        List<WebElement> elements = driver.findElements(By.className("field-validation-error"));
+
+        for(WebElement e:elements)
+        {
+            String errorTxt = e.getText();
+            //if any field contains error messages hasErrors return true and adds error message to error list
+            //If the error message from test case is not in the list then do not add it.
+            if(!errorTxt.isEmpty() && (!getErrorMessages().equals(errorMessage)))
+            {
+                setErrorMessage(errorTxt);
+                hasErrors = true;
+            }
+        }
+        return hasErrors;
+    }
+
+    public boolean hasErrors(WebDriver driver) {
+        boolean hasErrors = false;
+
+        List<WebElement> elements = driver.findElements(By.className("field-validation-error"));
+
+        for(WebElement e:elements)
+        {
+            String errorTxt = e.getText();
+            //if any field contains error messages hasErrors return true and adds error message to error list
+            //If the error message from test case is not in the list then do not add it.
+            if(!errorTxt.isEmpty())
+            {
+                setErrorMessage(errorTxt);
+                hasErrors = true;
+            }
+        }
+        return hasErrors;
     }
 
 }
