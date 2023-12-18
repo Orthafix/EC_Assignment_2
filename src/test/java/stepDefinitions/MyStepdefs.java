@@ -5,9 +5,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -47,7 +45,6 @@ public class MyStepdefs {
         String actual = dateBorn.getAttribute("value");
         String expected = helper.getBirthday();
         Assert.assertEquals(actual, expected);
-
     }
 
     // A private explicit wait
@@ -74,13 +71,9 @@ public class MyStepdefs {
         String email = helper.getRandomEmail();
         driver.findElement(By.id("member_emailaddress")).click();
         driver.findElement(By.id("member_emailaddress")).sendKeys(email);
-        //helper.setEmail(email);
-        //helper.setConfirmEmail(email);
 
         driver.findElement(By.id("member_confirmemailaddress")).click();
         driver.findElement(By.id("member_confirmemailaddress")).sendKeys(email);
-
-
     }
 
 

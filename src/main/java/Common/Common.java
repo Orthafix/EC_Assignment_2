@@ -1,9 +1,7 @@
 package Common;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WebDriver;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -80,7 +78,6 @@ public class Common {
         } catch (IndexOutOfBoundsException e) {
             System.out.println("Array was too long or short (out of bounds). " +
                     "See this message " + e.getMessage());
-
         }
         return email.toString();
     }
