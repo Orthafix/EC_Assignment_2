@@ -4,7 +4,7 @@ Feature: Create a supporter account
   To be able to have a beneficial membership
 
   Background:
-  """
+    """
     Create a supporter account for the basketball supporter
     """
 

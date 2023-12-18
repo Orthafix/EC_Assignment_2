@@ -15,22 +15,17 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.remote.tracing.opentelemetry.SeleniumSpanExporter;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
+
 
 public class MyStepdefs {
     private WebDriver driver;
     private final Common helper = new Common();
 
-    @Before
-    public void Setup() {
-        //TODO: Se om du kan ordna så den öppnar browsern härifrån eller alternativt background
-    }
 
     @Given("I am using {string} as browser")
     public void i_am_using_as_browser(String browser) {
@@ -43,18 +38,23 @@ public class MyStepdefs {
     }
 
     @Given("Member is born {}")
-    public void memberIsBornDriverUsingBrowser(String date) throws InterruptedException {
+    public void memberIsBornDriverUsingBrowser(String date) {
         helper.setBirthday(date);
         driver.findElement(By.id("dp")).click();
         driver.findElement(By.id("dp")).sendKeys(date);
         driver.findElement(By.id("dp")).sendKeys(Keys.ENTER);
-        WebElement dateBorn = (new WebDriverWait(driver,
-                Duration.ofSeconds(10))).until(
-                ExpectedConditions.visibilityOfElementLocated(By.id("dp")));
+        WebElement dateBorn = WaitForLocator(By.id("dp"));
         String actual = dateBorn.getAttribute("value");
         String expected = helper.getBirthday();
         Assert.assertEquals(actual, expected);
-        Thread.sleep(1000);
+
+    }
+
+    // A private explicit wait
+    private WebElement WaitForLocator(By locator) {
+        return (new WebDriverWait(driver,
+                Duration.ofSeconds(10))).until(
+                ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
     @And("The member's name is {} and {}")
@@ -74,8 +74,8 @@ public class MyStepdefs {
         String email = helper.getRandomEmail();
         driver.findElement(By.id("member_emailaddress")).click();
         driver.findElement(By.id("member_emailaddress")).sendKeys(email);
-        helper.setEmail(email);
-        helper.setConfirmEmail(email);
+        //helper.setEmail(email);
+        //helper.setConfirmEmail(email);
 
         driver.findElement(By.id("member_confirmemailaddress")).click();
         driver.findElement(By.id("member_confirmemailaddress")).sendKeys(email);
@@ -102,6 +102,18 @@ public class MyStepdefs {
         WebElement element2 = driver.findElement(By.cssSelector(".md-checkbox:nth-child(2) > label > .box"));
         element1.click();
         element2.click();
+
+        WebElement check1 = driver.findElement
+                (By.cssSelector("input[id='sign_up_25']"));
+        WebElement check2 = driver.findElement
+                (By.cssSelector("input[id='sign_up_26']"));
+
+        // Save for later verification after submit
+        helper.setAcceptTermsAndConditions(check1.isSelected());
+
+        Assert.assertTrue(check1.isSelected());
+        Assert.assertTrue(check2.isSelected());
+
     }
 
     @And("Member rejects terms and conditions")
@@ -123,9 +135,7 @@ public class MyStepdefs {
 
     @Then("date picker will display birthday")
     public void datePickerWillDisplay() {
-        WebElement dateBorn = (new WebDriverWait(driver,
-                Duration.ofSeconds(10))).until(
-                ExpectedConditions.visibilityOfElementLocated(By.id("dp")));
+        WebElement dateBorn = WaitForLocator(By.id("dp"));
         String actual = dateBorn.getAttribute("value");
         String expected = helper.getBirthday();
         Assert.assertEquals(expected, actual);
@@ -133,11 +143,14 @@ public class MyStepdefs {
 
     @And("email address will be equal to confirm email")
     public void emailAddressWillBeEqualToConfirmEmail() {
-        String expectedEmail = helper.getEmail();
-        String expectedConfEmail = helper.getConfirmEmail();
+        WebElement expectedEmail = driver.findElement
+                (By.cssSelector("input[id='member_emailaddress']"));
+
+        WebElement expectedConfEmail = driver.findElement
+                (By.cssSelector("input[id='member_confirmemailaddress']"));
 
         // Assert that email and confirmation email is equal
-        Assert.assertEquals(expectedEmail, expectedConfEmail);
+        Assert.assertEquals(expectedEmail.getAttribute("value"), expectedConfEmail.getAttribute("value"));
 
     }
 
@@ -158,6 +171,7 @@ public class MyStepdefs {
 
         boolean hasWarnings = helper.hasErrors(driver);
 
+        // Assert error message from error list
         if (hasWarnings) {
             List<String> errors = helper.getErrorMessages();
             Assert.assertTrue(errors.contains(errorMessage));
@@ -167,10 +181,10 @@ public class MyStepdefs {
     }
 
     @When("Confirm and join button is pressed")
-    public void confirmAndJoinButtonIsPressed() throws InterruptedException{
+    public void confirmAndJoinButtonIsPressed() {
         driver.findElement(By.cssSelector(
                 "#signup_form > div.form-actions.noborder > input")).submit();
-        Thread.sleep(2000);
+
     }
 
     @And("Last name is not empty")
@@ -193,13 +207,12 @@ public class MyStepdefs {
 
     @And("Members terms and conditions is accepted")
     public void membersTermsAndConditionsIsAccepted() {
-        // Add code so that it asserts that boolean members from Common class is used instead
-
-
+        Assert.assertTrue(helper.getAcceptTermsAndConditions());
     }
 
     @And("Members terms and conditions is rejected")
     public void membersTermsAndConditionsIsRejected() {
+
         boolean hasWarnings = helper.hasErrors(driver);
         if (hasWarnings) {
             String errorMessage = "You must confirm that you have read and accepted our Terms and Conditions";
@@ -218,7 +231,7 @@ public class MyStepdefs {
 
         boolean hasWarnings = helper.hasErrors(driver);
 
-        //check if member status is true - if not, do nothing as previous negative tests is already made
+        //check if member status is accepted - if not, do nothing as previous negative tests is already made
         if (!hasWarnings) {
             String expectedMessage = "THANK YOU FOR CREATING AN ACCOUNT WITH BASKETBALL ENGLAND";
             String actualMessage = driver.findElement(By.cssSelector(".bold:nth-child(1)")).getText();
@@ -233,16 +246,8 @@ public class MyStepdefs {
             Assert.assertEquals(expectedMessage, actualMessage);
             Assert.assertTrue(checkValidMemberNumber);
         }
-    }
 
-
-    @After
-    public void tearDown() {
-        // Clear error messages between test scenarios
-        // TODO: Make this working instead of using it above
         driver.quit();
-
     }
-
 
 }

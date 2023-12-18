@@ -9,14 +9,10 @@ import java.util.List;
 import java.util.Random;
 
 public class Common {
-
-    private String email;
-    private String confirmEmail;
-    private String firstName;
     private String lastName;
     private List<String> errorMessages;
     private String birthday;
-    private boolean memberStatus = true;
+    private boolean acceptTermsAndConditions;
     private final String[] HOST = {"@gmail", "@yahoo", "@hotmail", "@outlook", "@mail", "@aol", "@zoho", "@iCloud"};
     private final String[] DOMAIN = {".com", ".se", ".nu", ".de", ".io", ".org", ".net", ".co", ".app", ".uk", ".info"};
     private final String VOWELS = "aeiouyåäö";
@@ -26,32 +22,23 @@ public class Common {
     public Common() {
     }
 
-    public void setErrorMessage(String errorMessage)
-    {
+    public boolean getAcceptTermsAndConditions() {
+        return acceptTermsAndConditions;
+    }
+
+    public void setAcceptTermsAndConditions(boolean acceptTermsAndConditions) {
+        this.acceptTermsAndConditions = acceptTermsAndConditions;
+    }
+
+    // Adds error message to error list for current session
+    public void setErrorMessage(String errorMessage) {
         this.errorMessages = new ArrayList<>();
         this.errorMessages.add(errorMessage);
     }
 
-
-    public List<String> getErrorMessages()
-    {
+    //
+    public List<String> getErrorMessages() {
         return this.errorMessages;
-    }
-
-    public String getRandomEmail() {
-        return generateRandomEmail();
-    }
-
-    public boolean getMemberStatus() {
-        return memberStatus;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getFirstName() {
-        return firstName;
     }
 
     public void setLastName(String lastName) {
@@ -70,26 +57,14 @@ public class Common {
         return this.birthday;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public String getRandomEmail() {
+        return generateRandomEmail();
     }
 
-    public String getEmail() {
-        return this.email;
-    }
-
-    public void setConfirmEmail(String confirmEmail) {
-        this.confirmEmail = confirmEmail;
-    }
-
-    public String getConfirmEmail() {
-        return this.confirmEmail;
-    }
-
-    public String generateRandomEmail() {
+    // Random email generator based 6 random characters name + random host and random domain
+    private String generateRandomEmail() {
 
         Random random = new Random();
-        // Use string builder for easier string appending handling
         StringBuilder email = new StringBuilder();
 
         try {
@@ -111,7 +86,6 @@ public class Common {
     }
 
     private char vowel(int randVocal) {
-
         return VOWELS.charAt(randVocal);
     }
 
@@ -125,37 +99,16 @@ public class Common {
         return membershipNumber.matches(regex);
     }
 
-    public boolean hasErrors(WebDriver driver, String errorMessage) {
-        boolean hasErrors = false;
-
-        List<WebElement> elements = driver.findElements(By.className("field-validation-error"));
-
-        for(WebElement e:elements)
-        {
-            String errorTxt = e.getText();
-            //if any field contains error messages hasErrors return true and adds error message to error list
-            //If the error message from test case is not in the list then do not add it.
-            if(!errorTxt.isEmpty() && (!getErrorMessages().equals(errorMessage)))
-            {
-                setErrorMessage(errorTxt);
-                hasErrors = true;
-            }
-        }
-        return hasErrors;
-    }
-
+    // Evaluates if there is any active errors in the website to evaluate membership acceptance
     public boolean hasErrors(WebDriver driver) {
         boolean hasErrors = false;
 
         List<WebElement> elements = driver.findElements(By.className("field-validation-error"));
 
-        for(WebElement e:elements)
-        {
+        for (WebElement e : elements) {
             String errorTxt = e.getText();
             //if any field contains error messages hasErrors return true and adds error message to error list
-            //If the error message from test case is not in the list then do not add it.
-            if(!errorTxt.isEmpty())
-            {
+            if (!errorTxt.isEmpty()) {
                 setErrorMessage(errorTxt);
                 hasErrors = true;
             }
