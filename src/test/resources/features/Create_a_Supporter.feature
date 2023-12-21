@@ -15,14 +15,14 @@ Feature: Create a supporter account
     And Email address has been added
     And Password is <password> and retype password is <retype_password>
     And Member has the role Basket Ball media
-    And Member <handles_t_c> terms and conditions
+    When Member <handles_t_c> terms and conditions
     And Member accepts communication preferences
     And Member accepts coc
     Then date picker will display birthday
     And email address will be equal to confirm email
     And password will be <matched> to confirm password
-    Then Confirm and join button is pressed
-    And Last name <name_is_validated>
+    When Confirm and join button is pressed
+    Then Last name <name_is_validated>
     And Members terms and conditions is <validated>
     And a new member account will be created or rejected
 
