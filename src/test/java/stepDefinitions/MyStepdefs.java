@@ -55,7 +55,7 @@ public class MyStepdefs {
     }
 
     @And("The member's name is {} and {}")
-    public void theMemberSNameIsAnd(String firstname, String lastname) throws InterruptedException {
+    public void theMemberSNameIsAnd(String firstname, String lastname)  {
         driver.findElement(By.id("member_firstname")).click();
         driver.findElement(By.id("member_firstname")).sendKeys(firstname);
         driver.findElement(By.id("member_lastname")).sendKeys(lastname);
@@ -63,7 +63,6 @@ public class MyStepdefs {
                 (By.cssSelector("input[id='member_lastname']"));
 
         helper.setLastName(idLastName.getText());
-        Thread.sleep(1000);
     }
 
     @And("Email address has been added")
@@ -89,7 +88,7 @@ public class MyStepdefs {
 
     }
 
-    @And("Member accepts terms and conditions")
+    @When("Member accepts terms and conditions")
     public void memberAcceptsTermsAndConditions() {
         WebElement element1 = driver.findElement(By.cssSelector(".md-checkbox > .md-checkbox:nth-child(1) .box"));
         WebElement element2 = driver.findElement(By.cssSelector(".md-checkbox:nth-child(2) > label > .box"));
@@ -180,7 +179,7 @@ public class MyStepdefs {
 
     }
 
-    @And("Last name is not empty")
+    @Then("Last name is not empty")
     public void LastNameIsNotEmpty() {
         String lastName = helper.getLastName();
         Assert.assertNotNull(lastName);
