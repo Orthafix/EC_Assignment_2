@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class Common {
     private String lastName;
-    private List<String> errorMessages;
+    private final List<String> errorMessages = new ArrayList<>();;
     private String birthday;
     private boolean acceptTermsAndConditions;
     private final String[] HOST = {"@gmail", "@yahoo", "@hotmail", "@outlook", "@mail", "@aol", "@zoho", "@iCloud"};
@@ -30,7 +30,7 @@ public class Common {
 
     // Adds error message to error list for current session
     public void setErrorMessage(String errorMessage) {
-        this.errorMessages = new ArrayList<>();
+        //this.errorMessages = new ArrayList<>();
         this.errorMessages.add(errorMessage);
     }
 
