@@ -4,24 +4,27 @@ Feature: Create a supporter account
   To be able to have a beneficial membership
 
   Background:
-    """
+  """
     Create a supporter account for the basketball supporter
     """
 
-  Scenario Outline: Enter member details, validation and confirmation
+  @accountCreation
+  Scenario Outline: Successful and Failed Account Creation
     Given I am using "<browser>" as browser
-    Given Member is born <birthday>
+    And Member is born <birthday>
     And The member's name is <firstName> and <lastName>
     And Email address has been added
     And Password is <password> and retype password is <retype_password>
     And Member has the role Basket Ball media
-    When Member <handles_t_c> terms and conditions
+    And Member <handles_t_c> terms and conditions
     And Member accepts communication preferences
     And Member accepts coc
     Then date picker will display birthday
     And email address will be equal to confirm email
     And password will be <matched> to confirm password
+
     When Confirm and join button is pressed
+
     Then Last name <name_is_validated>
     And Members terms and conditions is <validated>
     And a new member account will be created or rejected

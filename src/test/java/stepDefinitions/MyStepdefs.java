@@ -35,8 +35,8 @@ public class MyStepdefs {
         driver.get("https://membership.basketballengland.co.uk/NewSupporterAccount");
     }
 
-    @Given("Member is born {}")
-    public void memberIsBornDriverUsingBrowser(String date) {
+    @And("Member is born {}")
+    public void memberIsBorn(String date) {
         helper.setBirthday(date);
         driver.findElement(By.id("dp")).click();
         driver.findElement(By.id("dp")).sendKeys(date);
@@ -47,15 +47,8 @@ public class MyStepdefs {
         Assert.assertEquals(actual, expected);
     }
 
-    // A private explicit wait
-    private WebElement WaitForLocator(By locator) {
-        return (new WebDriverWait(driver,
-                Duration.ofSeconds(10))).until(
-                ExpectedConditions.visibilityOfElementLocated(locator));
-    }
-
     @And("The member's name is {} and {}")
-    public void theMemberSNameIsAnd(String firstname, String lastname)  {
+    public void theMemberSNameIsAnd(String firstname, String lastname) {
         driver.findElement(By.id("member_firstname")).click();
         driver.findElement(By.id("member_firstname")).sendKeys(firstname);
         driver.findElement(By.id("member_lastname")).sendKeys(lastname);
@@ -88,7 +81,7 @@ public class MyStepdefs {
 
     }
 
-    @When("Member accepts terms and conditions")
+    @And("Member accepts terms and conditions")
     public void memberAcceptsTermsAndConditions() {
         WebElement element1 = driver.findElement(By.cssSelector(".md-checkbox > .md-checkbox:nth-child(1) .box"));
         WebElement element2 = driver.findElement(By.cssSelector(".md-checkbox:nth-child(2) > label > .box"));
@@ -123,6 +116,13 @@ public class MyStepdefs {
     @And("Member accepts coc")
     public void memberAcceptsCoc() {
         driver.findElement(By.cssSelector(".md-checkbox:nth-child(7) .box")).click();
+    }
+
+    @When("Confirm and join button is pressed")
+    public void confirmAndJoinButtonIsPressed() {
+        driver.findElement(By.cssSelector(
+                "#signup_form > div.form-actions.noborder > input")).submit();
+
     }
 
     @Then("date picker will display birthday")
@@ -172,12 +172,6 @@ public class MyStepdefs {
         Assert.assertNotEquals(passw, cpassw);
     }
 
-    @When("Confirm and join button is pressed")
-    public void confirmAndJoinButtonIsPressed() {
-        driver.findElement(By.cssSelector(
-                "#signup_form > div.form-actions.noborder > input")).submit();
-
-    }
 
     @Then("Last name is not empty")
     public void LastNameIsNotEmpty() {
@@ -241,5 +235,13 @@ public class MyStepdefs {
 
         driver.quit();
     }
+
+    // A private explicit wait
+    private WebElement WaitForLocator(By locator) {
+        return (new WebDriverWait(driver,
+                Duration.ofSeconds(10))).until(
+                ExpectedConditions.visibilityOfElementLocated(locator));
+    }
+
 
 }
