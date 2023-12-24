@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class Common {
     private String lastName;
-    private final List<String> errorMessages = new ArrayList<>();;
+    private final List<String> errorMessages = new ArrayList<>();
     private String birthday;
     private boolean acceptTermsAndConditions;
     private final String[] HOST = {"@gmail", "@yahoo", "@hotmail", "@outlook", "@mail", "@aol", "@zoho", "@iCloud"};
